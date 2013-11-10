@@ -40,12 +40,12 @@
 }
 
 - (void)switchViewControllerWithTag:(NSUInteger)tag {
-    if (tag == 0 && self.navigationView.currentViewController != self.testViewController) {
-        [self.navigationView setCurrentViewController:self.testViewController
-                                   withAnimationStyle:ITNavigationViewAnimationStylePop];
-    } else if (tag == 1 && self.navigationView.currentViewController != self.testTwoViewController) {
-        [self.navigationView setCurrentViewController:self.testTwoViewController
-                                   withAnimationStyle:ITNavigationViewAnimationStylePush];
+    if (tag == 0 && self.navigationView.currentView != self.testViewController.view) {
+        [self.navigationView setCurrentView:self.testViewController.view
+                         withAnimationStyle:ITNavigationViewAnimationStylePop];
+    } else if (tag == 1 && self.navigationView.currentView != self.testTwoViewController.view) {
+        [self.navigationView setCurrentView:self.testTwoViewController.view
+                         withAnimationStyle:ITNavigationViewAnimationStylePush];
     }
 }
 

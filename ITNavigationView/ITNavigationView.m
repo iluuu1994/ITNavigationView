@@ -104,17 +104,133 @@
     return _animationView;
 }
 
-- (void)setCurrentViewController:(NSViewController *)currentViewController {
+- (void)setCurrentView:(NSView *)currentView {
     if (self.animationStyle != ITNavigationViewAnimationStyleNone) {
-        [self setCurrentViewController:currentViewController withAnimation:YES];
+        [self setCurrentView:currentView withAnimation:YES];
     } else {
-        [self setCurrentViewController:currentViewController withAnimation:NO];
+        [self setCurrentView:currentView withAnimation:NO];
     }
+}
+
+- (void)setCurrentView:(NSView *)currentView withAnimation:(BOOL)animationFlag {
+    if (_isLocked) return;
+    
+    // Resize the subview to fit perfectly and add it
+    _currentView.frame = self.bounds;
+    currentView.frame = self.bounds;
+    _animationView.frame = self.bounds;
+    _cachedImageView.frame = self.bounds;
+    _oldCachedImageView.frame = self.bounds;
+    
+    // Remove old subview
+    [_currentView removeFromSuperview];
+    
+    if (!_currentView || !animationFlag) {
+        // Add the new view
+        [self addSubview:currentView];
+    } else {
+        // Animate
+        _isLocked = YES;
+        
+        // Display Animation View
+        self.oldCachedImageView.frame = self.bounds;
+        self.oldCachedImageView.image = [self imageOfView:_currentView];
+        
+        // Removes object from memory
+        _currentView = nil;
+        
+        self.cachedImageView.frame = [self rectForViewWithAnimationStyle:self.animationStyle oldView:NO];
+        self.cachedImageView.image = [self imageOfView:currentView];
+        
+        [self addSubview:self.animationView];
+        self.cachedImageView.alphaValue = 0.0;
+        self.oldCachedImageView.alphaValue = 1.0;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [NSAnimationContext beginGrouping];
+            {
+                // Removes the old view after the animation
+                [[NSAnimationContext currentContext] setCompletionHandler:^{
+                    [self.animationView removeFromSuperview];
+                    
+                    _cachedImageView.image = nil;
+                    _oldCachedImageView.image = nil;
+                    
+                    // Add the new view
+                    [self addSubview:currentView];
+                    
+                    // Set the first responder
+                    [currentView becomeFirstResponder];
+                    
+                    _isLocked = NO;
+                }];
+                
+                [[NSAnimationContext currentContext] setDuration:((([NSEvent modifierFlags] & NSShiftKeyMask) && [self enableShiftModifier])?self.animationDuration*kSlowAnimationMultiplier:self.animationDuration)];
+                [[NSAnimationContext currentContext] setTimingFunction:self.timingFunction];
+                
+                // Animates the new view to the same frame as the current view is right now
+                [[self.cachedImageView animator] setFrame:self.bounds];
+                [self.cachedImageView.animator setAlphaValue:1.0];
+                
+                // This is the old frame
+                [[self.oldCachedImageView animator] setFrame:[self rectForViewWithAnimationStyle:self.animationStyle oldView:YES]];
+                [self.oldCachedImageView.animator setAlphaValue:0.0];
+            }
+            [NSAnimationContext endGrouping];
+        });
+    }
+    
+    _currentView = currentView;
+}
+
+- (void)setCurrentView:(NSView *)currentView withAnimationStyle:(ITNavigationViewAnimationStyle)animationStyle {
+    self.animationStyle = animationStyle;
+    self.currentView = currentView;
 }
 
 - (BOOL)enableShiftModifier {
     return YES;
 }
+
+
+
+#pragma mark -
+#pragma mark Helpers
+
+- (NSRect)rectForViewWithAnimationStyle:(ITNavigationViewAnimationStyle)animationStyle oldView:(BOOL)oldRect{
+    NSRect modifiedRect = self.bounds;
+    int reverser = (oldRect)?-1:1;
+    
+    switch (animationStyle) {
+        case ITNavigationViewAnimationStylePush:
+            modifiedRect.origin.x = modifiedRect.size.width * reverser;
+            break;
+        case ITNavigationViewAnimationStylePop:
+            modifiedRect.origin.x = -modifiedRect.size.width * reverser;
+            break;
+        case ITNavigationViewAnimationStylePushDown:
+            modifiedRect.origin.y = modifiedRect.size.height * reverser;
+            break;
+        case ITNavigationViewAnimationStylePushUp:
+            modifiedRect.origin.y = -modifiedRect.size.height * reverser;
+            break;
+        default:
+            break;
+    }
+    
+    return modifiedRect;
+}
+
+- (NSImage *)imageOfView:(NSView *)view {
+    NSBitmapImageRep* rep = [view bitmapImageRepForCachingDisplayInRect:self.bounds];
+    [view cacheDisplayInRect:self.bounds toBitmapImageRep:rep];
+    
+    return [[NSImage alloc] initWithCGImage:[rep CGImage] size:view.bounds.size];
+}
+
+
+
+#pragma mark - Deprecated
 
 - (void)setCurrentViewController:(NSViewController *)currentViewController withAnimation:(BOOL)animationFlag {
     if (_isLocked) return;
@@ -135,7 +251,7 @@
     } else {
         // Animate
         _isLocked = YES;
-
+        
         // Display Animation View
         self.oldCachedImageView.frame = self.bounds;
         self.oldCachedImageView.image = [self imageOfView:_currentViewController.view];
@@ -145,11 +261,11 @@
         
         self.cachedImageView.frame = [self rectForViewWithAnimationStyle:self.animationStyle oldView:NO];
         self.cachedImageView.image = [self imageOfView:currentViewController.view];
-
+        
         [self addSubview:self.animationView];
         self.cachedImageView.alphaValue = 0.0;
         self.oldCachedImageView.alphaValue = 1.0;
-
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [NSAnimationContext beginGrouping];
             {
@@ -194,38 +310,13 @@
     self.currentViewController = currentViewController;
 }
 
-#pragma mark -
-#pragma mark Helpers
-
-- (NSRect)rectForViewWithAnimationStyle:(ITNavigationViewAnimationStyle)animationStyle oldView:(BOOL)oldRect{
-    NSRect modifiedRect = self.bounds;
-    int reverser = (oldRect)?-1:1;
-    
-    switch (animationStyle) {
-        case ITNavigationViewAnimationStylePush:
-            modifiedRect.origin.x = modifiedRect.size.width * reverser;
-            break;
-        case ITNavigationViewAnimationStylePop:
-            modifiedRect.origin.x = -modifiedRect.size.width * reverser;
-            break;
-        case ITNavigationViewAnimationStylePushDown:
-            modifiedRect.origin.y = modifiedRect.size.height * reverser;
-            break;
-        case ITNavigationViewAnimationStylePushUp:
-            modifiedRect.origin.y = -modifiedRect.size.height * reverser;
-            break;
-        default:
-            break;
+- (void)setCurrentViewController:(NSViewController *)currentViewController {
+    if (self.animationStyle != ITNavigationViewAnimationStyleNone) {
+        [self setCurrentViewController:currentViewController withAnimation:YES];
+    } else {
+        [self setCurrentViewController:currentViewController withAnimation:NO];
     }
-    
-    return modifiedRect;
 }
 
-- (NSImage *)imageOfView:(NSView *)view {
-    NSBitmapImageRep* rep = [view bitmapImageRepForCachingDisplayInRect:self.bounds];
-    [view cacheDisplayInRect:self.bounds toBitmapImageRep:rep];
-    
-    return [[NSImage alloc] initWithCGImage:[rep CGImage] size:view.bounds.size];
-}
 
 @end

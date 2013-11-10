@@ -38,17 +38,11 @@ typedef enum {
 @interface ITNavigationView : NSView
 
 /**
- * The current view controller, that is being displayed in the navigation controller
+ *  The current view, that is being displayed in the navigation controller
  */
-@property (nonatomic, strong) NSViewController *currentViewController;
-- (void)setCurrentViewController:(NSViewController *)currentViewController
-              withAnimationStyle:(ITNavigationViewAnimationStyle)animationStyle;
-
-/**
- * Change the view controller with, or without an animation
- */
-- (void)setCurrentViewController:(NSViewController *)currentViewController
-                   withAnimation:(BOOL)animationFlag;
+@property (nonatomic, strong) NSView *currentView;
+- (void)setCurrentView:(NSView *)currentView
+    withAnimationStyle:(ITNavigationViewAnimationStyle)animationStyle;
 
 /**
  * The style of the animation
@@ -74,5 +68,31 @@ typedef enum {
  * See if the navigation view is locked
  */
 @property (nonatomic, readonly) BOOL isLocked;
+
+
+
+// ****************************
+// ***************** DEPRECATED
+// ****************************
+
+/**
+ * This property is depricated. Use `currentViewController` instead.
+ * The current view controller, that is being displayed in the navigation controller
+ */
+@property (nonatomic, strong) NSViewController *currentViewController __deprecated;
+
+/**
+ * This property is depricated. Use `setCurrentViewController:withAnimationStyle:` instead.
+ * Set the current view controller, that is being displayed in the navigation controller
+ */
+- (void)setCurrentViewController:(NSViewController *)currentViewController
+              withAnimationStyle:(ITNavigationViewAnimationStyle)animationStyle __deprecated;
+
+/**
+ * This property is depricated. Use `setCurrentViewController:withAnimation:` instead.
+ * Change the view controller with, or without an animation
+ */
+- (void)setCurrentViewController:(NSViewController *)currentViewController
+                   withAnimation:(BOOL)animationFlag __deprecated;
 
 @end
