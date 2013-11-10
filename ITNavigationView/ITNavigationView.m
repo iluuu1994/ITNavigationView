@@ -115,6 +115,9 @@
 - (void)setCurrentView:(NSView *)currentView withAnimation:(BOOL)animationFlag {
     if (_isLocked) return;
     
+    // Make view resize properly
+    currentView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+    
     // Resize the subview to fit perfectly and add it
     _currentView.frame = self.bounds;
     currentView.frame = self.bounds;
@@ -224,6 +227,8 @@
 }
 
 - (NSImage *)imageOfView:(NSView *)view {
+    [view layoutSubtreeIfNeeded];
+    
     NSBitmapImageRep* rep = [view bitmapImageRepForCachingDisplayInRect:self.bounds];
     [view cacheDisplayInRect:self.bounds toBitmapImageRep:rep];
     
