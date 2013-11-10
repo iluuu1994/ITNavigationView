@@ -202,6 +202,8 @@
     int reverser = (oldRect)?-1:1;
     
     switch (animationStyle) {
+        case ITNavigationViewAnimationStyleFade:
+            break;
         case ITNavigationViewAnimationStylePush:
             modifiedRect.origin.x = modifiedRect.size.width * reverser;
             break;

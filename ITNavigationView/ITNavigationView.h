@@ -26,6 +26,7 @@
 #define ITNavigationViewTypedef
 
 typedef enum {
+    ITNavigationViewAnimationStyleFade,
     ITNavigationViewAnimationStylePush,
     ITNavigationViewAnimationStylePop,
     ITNavigationViewAnimationStylePushDown,

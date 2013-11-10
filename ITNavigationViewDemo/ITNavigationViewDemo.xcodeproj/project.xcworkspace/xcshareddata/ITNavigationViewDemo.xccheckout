@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D16506BB-0AEE-4CF5-AD2D-410E7179D6FB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ITNavigationViewDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>FB39CC17-7D24-4D9F-B3A6-E42F347131F8</key>
+		<string>https://github.com/iluuu1994/ITNavigationView.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ITNavigationViewDemo/ITNavigationViewDemo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>FB39CC17-7D24-4D9F-B3A6-E42F347131F8</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/iluuu1994/ITNavigationView.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>FB39CC17-7D24-4D9F-B3A6-E42F347131F8</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FB39CC17-7D24-4D9F-B3A6-E42F347131F8</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ITNavigationView</string>
+		</dict>
+	</array>
+</dict>
+</plist>
