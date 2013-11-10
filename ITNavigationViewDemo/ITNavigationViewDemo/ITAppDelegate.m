@@ -39,7 +39,7 @@
     [self switchViewControllerWithTag:[sender tag]];
 }
 
-- (void)switchViewControllerWithTag:(NSUInteger)tag {
+- (void)switchViewControllerWithTag:(NSUInteger)tag {    
     if (tag == 0 && self.navigationView.currentView != self.testViewController.view) {
         [self.navigationView setCurrentView:self.testViewController.view
                          withAnimationStyle:ITNavigationViewAnimationStylePop];

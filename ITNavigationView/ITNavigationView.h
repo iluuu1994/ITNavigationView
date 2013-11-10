@@ -82,14 +82,14 @@ typedef enum {
 @property (nonatomic, strong) NSViewController *currentViewController __deprecated;
 
 /**
- * This property is depricated. Use `setCurrentViewController:withAnimationStyle:` instead.
+ * This method is depricated. Use `setCurrentViewController:withAnimationStyle:` instead.
  * Set the current view controller, that is being displayed in the navigation controller
  */
 - (void)setCurrentViewController:(NSViewController *)currentViewController
               withAnimationStyle:(ITNavigationViewAnimationStyle)animationStyle __deprecated;
 
 /**
- * This property is depricated. Use `setCurrentViewController:withAnimation:` instead.
+ * This method is depricated. Use `setCurrentViewController:withAnimation:` instead.
  * Change the view controller with, or without an animation
  */
 - (void)setCurrentViewController:(NSViewController *)currentViewController
